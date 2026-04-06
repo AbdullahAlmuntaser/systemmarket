@@ -1,4 +1,9 @@
 {
   "IDX.agenticWorkspace": true,
-  "geminicodeassist.outlines.automaticOutlineGeneration": true
+  "geminicodeassist.outlines.automaticOutlineGeneration": true,
+  "workbench.editor.alwaysShowEditorActions": true,
+  "workbench.editor.autoLockGroups": {
+    "default": true
+  },
+  "editor.experimental.treeSitterTelemetry": true
 }
