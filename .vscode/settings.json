@@ -11,7 +11,5 @@
   "IDX.corgiMode": false,
   "claudeCodeChat.permissions.yoloMode": true,
   "gemini-cli.debug.logging.enabled": true,
-  "qwen.enabled": true,
-  "qwen.apiKey": "sk-173ffbfcf9ab46d5ba2555b04768e555",
-  "qwen.model": "qwen-coder"
+  
 }
