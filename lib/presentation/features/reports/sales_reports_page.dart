@@ -4,6 +4,8 @@ import 'package:supermarket/data/datasources/local/app_database.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:drift/drift.dart' as drift;
 import 'package:supermarket/l10n/app_localizations.dart';
+import 'export_service.dart';
+import 'package:intl/intl.dart';
 
 class SalesReportsPage extends StatefulWidget {
   const SalesReportsPage({super.key});
@@ -12,7 +14,7 @@ class SalesReportsPage extends StatefulWidget {
   State<SalesReportsPage> createState() => _SalesReportsPageState();
 }
 
-class _SalesReportsPageState extends State<SalesReportsPage> {
+class _SalesReportsPageState extends State<SalesReportsPage> with ExportMixin {
   DateTime _startDate = DateTime.now().subtract(const Duration(days: 7));
   DateTime _endDate = DateTime.now();
 
@@ -25,6 +27,10 @@ class _SalesReportsPageState extends State<SalesReportsPage> {
       appBar: AppBar(
         title: Text(l10n.viewReports),
         actions: [
+          IconButton(
+            icon: const Icon(Icons.file_download),
+            onPressed: () => _exportData(db),
+          ),
           IconButton(
             icon: const Icon(Icons.date_range),
             onPressed: () => _selectDateRange(context),
@@ -212,6 +218,25 @@ class _SalesReportsPageState extends State<SalesReportsPage> {
         );
       },
     );
+  }
+  
+  Future<void> _exportData(AppDatabase db) async {
+    // جمع بيانات المبيعات للتصدير
+    final salesData = <Map<String, dynamic>>[];
+    
+    // هنا نجمع البيانات من قاعدة البيانات
+    // هذا مثال، في الواقع ستجلب البيانات الفعلية
+    salesData.add({
+      'date': DateFormat('yyyy-MM-dd').format(DateTime.now()),
+      'invoiceNumber': 'INV-001',
+      'product': 'منتج تجريبي',
+      'quantity': 10,
+      'price': 50.0,
+      'total': 500.0,
+      'customer': 'عميل نقدي',
+    });
+    
+    showExportDialog(salesData);
   }
 }
 

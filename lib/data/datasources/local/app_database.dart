@@ -370,11 +370,34 @@ class Reconciliations extends Table with SyncableTable {
 
 class AuditLogs extends Table with SyncableTable {
   TextColumn get userId => text().nullable()();
+  TextColumn get userName => text().nullable()();
   TextColumn get action => text()(); // CREATE, UPDATE, DELETE
-  TextColumn get targetEntity => text()(); // Products, Sales, etc.
+  TextColumn get entityType => text()(); // Products, Sales, etc.
   TextColumn get entityId => text()();
-  TextColumn get details => text().nullable()();
+  TextColumn get oldValue => text().nullable()(); // JSON
+  TextColumn get newValue => text().nullable()(); // JSON
+  TextColumn get description => text().nullable()();
+  TextColumn get ipAddress => text().nullable()();
+  TextColumn get module => text().nullable()();
   DateTimeColumn get timestamp => dateTime().withDefault(currentDateAndTime)();
+}
+
+class Notifications extends Table with SyncableTable {
+  TextColumn get title => text()();
+  TextColumn get message => text()();
+  TextColumn get type => text()(); // lowStock, outOfStock, debtReminder, etc.
+  TextColumn get userId => text().nullable().references(Users, #id)();
+  BoolColumn get isRead => boolean().withDefault(const Constant(false))();
+  TextColumn get entityId => text().nullable()();
+  TextColumn get metadata => text().nullable()(); // JSON
+  DateTimeColumn get readAt => dateTime().nullable()();
+}
+
+class Roles extends Table with SyncableTable {
+  TextColumn get name => text()();
+  TextColumn get roleType => text()(); // ADMIN, MANAGER, ACCOUNTANT, etc.
+  TextColumn get permissions => text().nullable()(); // JSON array of permissions
+  BoolColumn get isSystemRole => boolean().withDefault(const Constant(false))();
 }
 
 class StockTransfers extends Table with SyncableTable {
@@ -667,6 +690,7 @@ class SalesOrderItems extends Table with SyncableTable {
     InventoryTransactions,
     AccountTransactions,
     PostingProfiles,
+    Notifications,
   ],
   daos: [
     ProductsDao,
@@ -683,7 +707,7 @@ class AppDatabase extends _$AppDatabase {
   AppDatabase([QueryExecutor? e]) : super(e ?? _openConnection());
 
   @override
-  int get schemaVersion => 28; // Incremented schema version
+  int get schemaVersion => 29; // Incremented schema version
 
   @override
   MigrationStrategy get migration => MigrationStrategy(
