@@ -16,7 +16,7 @@ jobs:
       - name: Install Flutter
         uses: subosito/flutter-action@v2
         with:
-          flutter-version: '3.19.0'   # ضع الإصدار المناسب لمشروعك
+          flutter-version: '3.3.0'   # ضع الإصدار المناسب لمشروعك
 
       # 3) تحميل الحزم
       - name: Get dependencies
