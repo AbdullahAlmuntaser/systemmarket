@@ -1,4 +1,4 @@
-name: Build Test APK
+name: Build Release APK
 
 on:
   workflow_dispatch:
@@ -8,22 +8,27 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: 📥 تحميل المشروع
+      # 1) تحميل المشروع
+      - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: ⚙️ تثبيت Flutter
+      # 2) تثبيت Flutter
+      - name: Install Flutter
         uses: subosito/flutter-action@v2
         with:
-          flutter-version: '3.22.0'
+          flutter-version: '3.19.0'   # ضع الإصدار المناسب لمشروعك
 
-      - name: 📦 تحميل الحزم
+      # 3) تحميل الحزم
+      - name: Get dependencies
         run: flutter pub get
 
-      - name: 🛠 بناء APK (تجريبي)
-        run: flutter build apk --debug
+      # 4) بناء نسخة Release مع split-per-abi
+      - name: Build Release APKs
+        run: flutter build apk --release --split-per-abi
 
-      - name: 📤 رفع الملف
+      # 5) رفع الملفات الناتجة كـ Artifact
+      - name: Upload Release APKs
         uses: actions/upload-artifact@v4
         with:
-          name: app-debug
-          path: build/app/outputs/flutter-apk/app-debug.apk
+          name: release-apks
+          path: build/app/outputs/flutter-apk/*.apk
