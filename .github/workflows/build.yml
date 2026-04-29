@@ -1,0 +1,29 @@
+name: Build Test APK
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: 📥 تحميل المشروع
+        uses: actions/checkout@v3
+
+      - name: ⚙️ تثبيت Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '3.22.0'
+
+      - name: 📦 تحميل الحزم
+        run: flutter pub get
+
+      - name: 🛠 بناء APK (تجريبي)
+        run: flutter build apk --debug
+
+      - name: 📤 رفع الملف
+        uses: actions/upload-artifact@v3
+        with:
+          name: app-debug
+          path: build/app/outputs/flutter-apk/app-debug.apk
